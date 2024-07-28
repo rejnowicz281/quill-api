@@ -1,6 +1,7 @@
 package com.rejnowicz.quillapi.service.user;
 
 
+import com.rejnowicz.quillapi.controller.user.dto.ConfidentialUserDto;
 import com.rejnowicz.quillapi.controller.user.dto.UserDto;
 import com.rejnowicz.quillapi.repository.user.UserRepository;
 import com.rejnowicz.quillapi.service.user.mapper.UserDtoMapper;
@@ -19,5 +20,10 @@ public class UserService {
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
                 .map(UserDtoMapper::map).toList();
+    }
+
+    public List<ConfidentialUserDto> findAllConfidential() {
+        return userRepository.findAll().stream()
+                .map(UserDtoMapper::mapConfidential).toList();
     }
 }

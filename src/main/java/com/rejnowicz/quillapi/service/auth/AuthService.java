@@ -4,7 +4,9 @@ import com.rejnowicz.quillapi.configuration.security.jwt.JWTGenerator;
 import com.rejnowicz.quillapi.controller.auth.dto.EditAccountDto;
 import com.rejnowicz.quillapi.controller.auth.dto.LoginDto;
 import com.rejnowicz.quillapi.controller.auth.dto.RegisterDto;
+import com.rejnowicz.quillapi.model.role.Role;
 import com.rejnowicz.quillapi.model.user.UserEntity;
+import com.rejnowicz.quillapi.repository.role.RoleRepository;
 import com.rejnowicz.quillapi.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
@@ -25,6 +28,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     private final JWTGenerator jwtGenerator;
 
     public String register(RegisterDto registerDto) {
@@ -39,6 +43,10 @@ public class AuthService {
         user.setName(name);
         user.setEmail(registerDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+
+        Role roles = roleRepository.findByName("USER").get();
+
+        user.setRoles(Collections.singletonList(roles));
 
         userRepository.save(user);
 
