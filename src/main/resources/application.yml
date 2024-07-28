@@ -1,0 +1,27 @@
+cors:
+  allowedOrigins:
+    - http://localhost:3000
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+spring:
+  application:
+    name: quill-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quill
+    username: postgres
+    password: postgres
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    table: flyway_quill
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
