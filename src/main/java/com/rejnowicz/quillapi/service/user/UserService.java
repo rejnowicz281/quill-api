@@ -1,9 +1,11 @@
 package com.rejnowicz.quillapi.service.user;
 
 
+import com.rejnowicz.quillapi.configuration.security.SecurityUtils;
 import com.rejnowicz.quillapi.controller.user.dto.ConfidentialUserDto;
 import com.rejnowicz.quillapi.controller.user.dto.UserDto;
 import com.rejnowicz.quillapi.repository.user.UserRepository;
+import com.rejnowicz.quillapi.service.auth.AuthService;
 import com.rejnowicz.quillapi.service.user.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
