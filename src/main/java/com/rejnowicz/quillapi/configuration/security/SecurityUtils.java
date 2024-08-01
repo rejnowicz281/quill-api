@@ -15,7 +15,7 @@ public class SecurityUtils {
         // TODO: move this to env and change it
         String keyString = "dDP0Pky0LqNWs/YvpEYsjZetDuivDh3289HRYeAFMsg+NNYBMd5Cj7cXEiQZYpg6JEQsHxgzbmxb34QkPNZ/o0B7WEdJTes3Wkgky41RBQCiVJczBFETed1AIp52JfZiHYGwvB7XxM6NRsVpJ+Fx6/XskNYOhn731Rljq5Xz0Jp2";
 
-        byte[] decodedKey = Base64.getDecoder().decode(keyString);
+        byte[] decodedKey = keyString.getBytes();
 
         return Keys.hmacShaKeyFor(decodedKey);
     }
