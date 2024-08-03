@@ -8,12 +8,10 @@ import com.rejnowicz.quillapi.repository.user.UserRepository;
 import com.rejnowicz.quillapi.service.auth.AuthService;
 import com.rejnowicz.quillapi.service.user.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
