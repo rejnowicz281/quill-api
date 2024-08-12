@@ -11,3 +11,8 @@ spring:
     hibernate:
       ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+imagekit:
+  url-endpoint: ${IMAGEKIT_URL_ENDPOINT}
+  public-key: ${IMAGEKIT_PUBLIC_KEY}
+  private-key: ${IMAGEKIT_PRIVATE_KEY}

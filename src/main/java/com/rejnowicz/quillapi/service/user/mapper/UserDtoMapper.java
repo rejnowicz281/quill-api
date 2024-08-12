@@ -10,6 +10,7 @@ public class UserDtoMapper {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .avatarUrl(user.getAvatarUrl())
                 .build();
     }
 
@@ -21,6 +22,7 @@ public class UserDtoMapper {
                 .createdAt(user.getCreatedAt())
                 .roles(user.getRoles())
                 .password(user.getPassword())
+                .avatarUrl(user.getAvatarUrl())
                 .build();
     }
 }

@@ -17,4 +17,5 @@ public class ConfidentialUserDto {
     private Date createdAt;
     private List<Role> roles;
     private String password;
+    private String avatarUrl;
 }
