@@ -31,6 +31,12 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final JWTGenerator jwtGenerator;
 
+    public String getUserToken() {
+        var currentUser = getCurrentUser().orElseThrow(() -> new RuntimeException("User not found"));
+
+        return jwtGenerator.generateToken(currentUser);
+    }
+
     public String register(RegisterDto registerDto) {
         UserEntity user = new UserEntity();
 

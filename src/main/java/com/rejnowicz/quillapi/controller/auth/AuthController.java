@@ -19,6 +19,13 @@ public class AuthController {
     private final AuthService authService;
     private final UserRepository userRepository;
 
+    @GetMapping("get-user-token")
+    public ResponseEntity<AuthResponseDto> getUserToken() {
+        String token = authService.getUserToken();
+
+        return ResponseEntity.ok(new AuthResponseDto(token));
+    }
+
     @PostMapping("register")
     public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto) {
         if (userRepository.existsByEmail(registerDto.getEmail())) {
