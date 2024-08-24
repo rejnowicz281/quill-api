@@ -3,9 +3,11 @@ package com.rejnowicz.quillapi.configuration.security.jwt;
 import com.rejnowicz.quillapi.configuration.security.SecurityConstants;
 import com.rejnowicz.quillapi.configuration.security.SecurityUtils;
 import com.rejnowicz.quillapi.model.user.UserEntity;
+import com.rejnowicz.quillapi.service.redis.RedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -18,7 +20,17 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JWTGenerator {
-    private static final Key key = SecurityUtils.getSecurityKey();
+    private final SecurityUtils securityUtils;
+    private final RedisService redisService;
+
+    private final Key key;
+
+    public JWTGenerator(SecurityUtils securityUtils, RedisService redisService) {
+        this.securityUtils = securityUtils;
+        this.redisService = redisService;
+        this.key = securityUtils.getSecurityKey();
+    }
+
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -30,9 +42,14 @@ public class JWTGenerator {
         Date currentDate = new Date();
 
         Date expiryDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
+        var tokenVersion = Integer.parseInt(redisService.getJedisPool().get("userTokenVersion:" + user.getId()));
 
-        Map<String, Object> claims = Map.of("id", user.getId(), "name", user.getName(), "avatar_url", user.getAvatarUrl(),
-                "role", user.getRoles().get(0).getName(), "created_at", user.getCreatedAt().toString(), "version", 0);
+        Map<String, Object> claims = Map.of("id", user.getId(),
+                "name", user.getName(),
+                "avatar_url", user.getAvatarUrl(),
+                "role", user.getRoles().get(0).getName(),
+                "created_at", user.getCreatedAt().toString(),
+                "version", tokenVersion);
 
         return Jwts.builder().setSubject(user.getEmail()).setIssuedAt(currentDate).setExpiration(expiryDate)
                 .addClaims(claims)

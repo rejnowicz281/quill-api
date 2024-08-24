@@ -8,6 +8,7 @@ import com.rejnowicz.quillapi.model.role.Role;
 import com.rejnowicz.quillapi.model.user.UserEntity;
 import com.rejnowicz.quillapi.repository.role.RoleRepository;
 import com.rejnowicz.quillapi.repository.user.UserRepository;
+import com.rejnowicz.quillapi.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
@@ -30,6 +32,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final JWTGenerator jwtGenerator;
+    private final RedisService redisService;
 
     public String getUserToken() {
         var currentUser = getCurrentUser().orElseThrow(() -> new RuntimeException("User not found"));
@@ -83,6 +86,8 @@ public class AuthService {
             return "";
         }
 
+        incrUserTokenVersion(currentUser.getId());
+
         return authenticate(currentUser.getEmail(), password);
     }
 
@@ -112,6 +117,12 @@ public class AuthService {
     public void deleteAccount() {
         var currentUser = getCurrentUser().orElseThrow(() -> new RuntimeException("User not found"));
 
+        incrUserTokenVersion(currentUser.getId());
+
         userRepository.delete(currentUser);
+    }
+
+    private void incrUserTokenVersion(UUID userId) {
+        redisService.getJedisPool().incr("userTokenVersion:" + userId);
     }
 }
